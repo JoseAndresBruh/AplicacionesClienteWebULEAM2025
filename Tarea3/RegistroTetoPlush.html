@@ -1,0 +1,95 @@
+<link rel="stylesheet" href="estilos_teto_registro.css">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteo Peluche Kasane Teto - 💖 TERMINAL TETO 💖</title>
+    <link rel="stylesheet" href="teto_estilos_absoluto.css">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"> 
+</head>
+<body>
+    <audio id="mesmerizerAudio" src="mesmerizer.mp3" preload="auto"></audio>
+
+    <div class="container">
+        
+        <div class="teto-plush-float"></div>
+
+        <div class="main-content">
+            
+            <div class="side-image-left"></div>
+
+            <div class="registration-form-container">
+                <h1>REGISTRO PARA EL SORTEO V.1.0.1</h1>
+                <form id="registrationForm">
+                    <div class="form-group">
+                        <label for="nombre">[NOMBRE]</label>
+                        <input type="text" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido">[APELLIDO]</label>
+                        <input type="text" id="apellido" name="apellido" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">[EMAIL] <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pais">[PAÍS/REGIÓN]</label>
+                        <input type="text" id="pais" name="pais">
+                    </div>
+                    <div class="form-group">
+                        <label for="ciudad">[CIUDAD]</label>
+                        <input type="text" id="ciudad" name="ciudad">
+                    </div>
+                    <div class="form-group">
+                        <label for="comentario">[MENSAJE PARA TETO]</label>
+                        <textarea id="comentario" name="comentario" rows="4"></textarea>
+                    </div>
+                    <button type="submit">PARTICIPAR</button>
+                </form>
+                <div id="mensajeExito" style="display: none;">
+                    <p>
+                        >> REGISTRO EXITOSO. <br>
+                        >> CONFIRMANDO DATOS. <br>
+                        >> SUERTE EN EL SORTEO. <br>
+                        >> █
+                    </p>
+                </div>
+            </div>
+
+            <div class="side-image-right"></div>
+        </div>
+
+        <div class="gif-float-left">
+            <img src="teto_dance_small.gif" alt="Teto bailando 1">
+        </div>
+        <div class="gif-float-right">
+            <img src="teto_dance_small.gif" alt="Teto bailando 2">
+        </div>
+        
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mesmerizerAudio = document.getElementById('mesmerizerAudio');
+
+            document.body.addEventListener('click', () => {
+                if (mesmerizerAudio.paused) {
+                    mesmerizerAudio.play().catch(e => console.log("La reproducción automática fue bloqueada:", e));
+                }
+            });
+
+            const registrationForm = document.getElementById('registrationForm');
+            const mensajeExito = document.getElementById('mensajeExito');
+
+            registrationForm.addEventListener('submit', (event) => {
+                event.preventDefault(); 
+                registrationForm.reset(); 
+                registrationForm.style.display = 'none'; 
+                mensajeExito.style.display = 'block'; 
+            });
+        });
+    </script>
+</body>
+</html>
