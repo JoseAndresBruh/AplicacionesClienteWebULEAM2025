@@ -1,0 +1,162 @@
+:root {/* Paleta colores */
+    --teto-red-vibrant: #e30000; 
+    --teto-red-soft: #ff8a8a; 
+    --teto-red-background: #cc4545; 
+    --teto-red-base: #a02020; 
+    --teto-black: #111; 
+    --teto-gray-input: #444; 
+    --teto-white: #f0f0f0; }
+body {font-family: 'VT323', monospace;
+    background-color: var(--teto-red-background);
+    color: var(--teto-black);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image: repeating-linear-gradient(
+        0deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 2px
+    );
+    font-size: 18px;}
+
+.container {width: 90%;
+    max-width: 1400px;
+    padding: 20px;
+    margin-top: 30px;
+    background-color: var(--teto-red-base); 
+    box-shadow: 0 0 0 5px var(--teto-red-vibrant), 0 0 15px rgba(0, 0, 0, 0.8);
+    border-radius: 0;
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    position: relative;}
+
+/* PELUCHE DE TETO */
+.teto-plush-float {    width: 200px; 
+    height: 200px; 
+    background-color: var(--teto-red-soft); 
+    border-radius: 0;
+    border: 3px solid var(--teto-red-vibrant);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+    background-image: url('peluche_teto.png'); 
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    
+    position: absolute; 
+    top: -10px; 
+
+    left: 50%; 
+    transform: translateX(-50%); 
+    z-index: 10; }
+
+.main-content {    display: flex; 
+    width: 100%;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-top: 150px; }
+
+/* IMÁGENES LATERALES */
+.side-image-left,
+.side-image-right {    width: 250px; 
+    height: 650px; 
+    background-color: var(--teto-red-soft); 
+    border-radius: 0;
+    border: 3px solid var(--teto-black);
+    box-shadow: 0 0 0 3px var(--teto-red-vibrant);
+    flex-shrink: 0;
+    background-image: url('teto_mesmerizer.png'); 
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;}
+
+.side-image-right {transform: scaleX(-1);}
+
+.registration-form-container {    flex-grow: 1; 
+    background-color: var(--teto-red-soft); 
+    padding: 30px;
+    border-radius: 0;
+    margin: 0 30px; 
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+    border: 2px dashed var(--teto-red-vibrant);
+    text-align: center;
+    color: var(--teto-black);}
+
+/* --- Estilos de Formulario ---*/
+h1 { color: var(--teto-red-vibrant); margin-bottom: 30px; font-size: 2.5em; text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.5); }
+.form-group { margin-bottom: 20px; text-align: left; }
+label { display: block; margin-bottom: 8px; color: var(--teto-black); font-size: 1.2em; }
+.required { color: var(--teto-red-vibrant); font-weight: bold; }
+input[type="text"], input[type="email"], textarea {
+    width: calc(100% - 24px); padding: 10px; border: 2px solid var(--teto-red-vibrant); border-radius: 0;
+    background-color: var(--teto-gray-input); color: var(--teto-white); font-size: 1.2em;
+    box-sizing: border-box; font-family: 'VT323', monospace;}
+input[type="text"]:focus, input[type="email"]:focus, textarea:focus { border-color: var(--teto-black); outline: none; box-shadow: 0 0 5px var(--teto-red-vibrant); }
+textarea { resize: none; min-height: 100px; }
+button[type="submit"] {    background-color: var(--teto-red-vibrant); color: var(--teto-black); padding: 12px 25px;
+    border: 3px solid var(--teto-black); border-radius: 0; cursor: pointer; font-size: 1.5em;
+    font-weight: bold; margin-top: 25px; transition: background-color 0.1s linear, color 0.1s linear;
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.5);}
+button[type="submit"]:hover { background-color: var(--teto-red-soft); color: var(--teto-red-vibrant); border-color: var(--teto-red-vibrant); }
+#mensajeExito {    margin-top: 30px; padding: 25px; background-color: var(--teto-red-vibrant);
+    border: 3px solid var(--teto-black); color: var(--teto-white); font-size: 1.5em;
+    text-align: left; white-space: pre-wrap; line-height: 1.2;}
+
+
+/* GIFs DE TETO :3 */
+.gif-float-left, .gif-float-right {    width: 220px; 
+    height: 220px; 
+    background-color: var(--teto-red-soft); 
+    border-radius: 0;
+    border: 4px groove var(--teto-red-vibrant);
+    box-shadow: 0 0 15px rgba(227, 0, 0, 0.6);
+    overflow: hidden;
+    position: absolute; 
+    bottom: 50px; 
+    z-index: 5; }
+
+.gif-float-left {left: 20px; }
+
+.gif-float-right {right: 20px;}
+
+.gif-float-left img, .gif-float-right img {    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;}
+
+/* Media */
+@media (max-width: 900px) {
+    .main-content {
+        flex-direction: column;
+        align-items: center;
+        padding-top: 100px; 
+    }
+
+    .teto-plush-float {
+        top: -50px; 
+    }
+
+    .side-image-left,
+    .side-image-right {
+        margin-bottom: 20px;
+        height: 250px; 
+        width: 100%; 
+        transform: none; 
+    }
+
+    .registration-form-container {
+        margin: 20px 0;
+        width: 100%;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .gif-float-left, .gif-float-right {
+        position: static; 
+        margin: 10px auto; 
+    }
+}
