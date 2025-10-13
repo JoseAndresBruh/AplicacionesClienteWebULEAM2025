@@ -1,0 +1,55 @@
+body {    font-family: 'Comic Sans MS', cursive; 
+    background-color: #f4f4f4; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;}
+
+.caja-simple {    background-color: white;
+    padding: 25px;
+    border: 1px solid #ccc; 
+    border-radius: 6px; 
+    text-align: center;
+    width: 380px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+
+h1 {    color: #333; 
+    border-bottom: 1px solid #eee; 
+    padding-bottom: 10px;}
+
+.interaccion {margin-top: 15px;}
+
+.interaccion label {    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: left; 
+    width: 90%;
+    margin: 0 auto 5px auto;}
+
+.interaccion input[type="number"] {    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: right;
+    width: 90%;
+    margin-bottom: 10px;}
+
+.interaccion button {    background-color: #0056b3; 
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.2s;}
+
+.btn-reiniciar {    background-color: #d9534f; /* Rojo para el botón de reinicio */
+    margin-top: 15px;
+    padding: 8px 15px;}
+
+.mensaje {    margin-top: 20px;
+    font-size: 1.1em;
+    color: #333; 
+    font-weight: bold;
+    min-height: 20px;}
