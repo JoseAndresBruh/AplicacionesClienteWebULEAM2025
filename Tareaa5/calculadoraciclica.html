@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Cíclica de Operaciones</title>
+    <link rel="stylesheet" href="estiloscalculadora.css"> 
+</head>
+<body>
+
+    <main class="caja-simple">
+        <h1>Calculadora de operaciones cíclicas</h1>
+        <p>Ciclo de 5 operaciones: + / - / * / ÷ / %</p>
+        
+        <div class="interaccion">
+            <label for="valor1">Valor 1:</label>
+            <input type="number" id="valor1" value="" placeholder="Ingrese el primer número">
+            
+            <label for="valor2">Valor 2:</label>
+            <input type="number" id="valor2" value="" placeholder="Ingrese el segundo número">
+
+            <button onclick="ejecutarOperacion()">
+                Calcular (Operación 1)
+            </button>
+        </div>
+        
+        <p id="resultado" class="mensaje">Resultado: 0.00</p>
+
+        <button onclick="reiniciarCalculadora()" class="btn-reiniciar">
+            Reiniciar Ciclo
+        </button>
+    </main>
+
+    <script src="scriptcalculadora.js"></script>
+</body>
+</html>
