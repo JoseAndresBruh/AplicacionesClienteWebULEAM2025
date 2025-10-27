@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docente | Gestión de Asistencias</title>
+    <link rel="stylesheet" href="dashboard-styles.css"> 
+    <link rel="stylesheet" href="docente-styles.css"> 
+    <script src="docente.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-area">
+                <img src="logouleamhorizontal.png" alt="Logo ULEAM" class="header-logo-horizontal">
+                <span class="system-title">Gestión de Asistencia Docente</span>
+            </div>
+            <div class="user-info">
+                <span id="welcome-message">Bienvenido/a, <strong id="docente-name-display">Docente</strong></span>
+                <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
+            </div>
+        </div>
+    </header>
+    <nav class="docente-tabs">
+        <button class="tab-button active" data-tab="registro">
+            <i class="fas fa-list-alt"></i> 
+            Registro de Asistencia
+        </button>
+        <button class="tab-button" data-tab="reportes">
+            <i class="fas fa-chart-line"></i> 
+            Reportes Avanzados
+        </button>
+        <button class="tab-button" data-tab="pendientes">
+            <i class="fas fa-exclamation-triangle"></i> 
+            Justificaciones Pendientes 
+            <span id="pending-count" class="badge">0</span>
+        </button>
+    </nav>
+
+    <div class="contenedor-seccion main-docente-content">
+        
+        <div id="registro" class="tab-content active">
+            <h2 class="Tema">Pase de Lista: <span id="current-course-display"></span></h2>
+            <div class="linea"></div>
+
+            <div class="course-controls">
+                <label for="registro-curso-select">Curso:</label>
+                <select id="registro-curso-select" class="control-select" onchange="loadRegistro()">
+                    </select>
+
+                <label for="registro-paralelo-select">Paralelo:</label>
+                <select id="registro-paralelo-select" class="control-select" onchange="loadRegistro()">
+                    <option value="A">Paralelo A</option>
+                    <option value="B">Paralelo B</option>
+                    <option value="C">Paralelo C</option>
+                </select>
+                <input type="date" id="registro-date" class="control-select" value="" onchange="loadRegistro()">
+            </div>
+
+            <div class="table-responsive">
+                <table id="registro-table" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Estudiante</th>
+                            <th class="status-col">Asistencia</th>
+                            <th>Observación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+
+            <div class="control-buttons">
+                <button class="btn-secondary" onclick="regresar()">Regresar</button>
+                <button class="btn-primary" onclick="saveAndAdvance()">Guardar Asistencia</button>
+                <button class="btn-logout" onclick="finalizarRegistro()">Finalizar</button>
+            </div>
+        </div>
+
+        <div id="reportes" class="tab-content">
+            <h2 class="Tema">Generación y Consulta de Reportes</h2>
+            <div class="linea"></div>
+
+            <div class="report-mode-selector">
+                <label for="report-mode-select">Modo de Reporte:</label>
+                <select id="report-mode-select" class="control-select" onchange="changeReportMode()">
+                    <option value="generate">Generar Nuevo Reporte</option>
+                    <option value="view">Visualizar Reportes Guardados</option>
+                </select>
+            </div>
+            
+            <div id="generate-filters" class="report-mode-content active">
+                <h3 class="Subtema" id="report-title">Generar Reporte Acumulado por Estudiante</h3>
+                <div class="report-filters">
+                    <label for="reporte-curso-select">Curso:</label>
+                    <select id="reporte-curso-select" class="control-select">
+                        </select>
+                    <label for="reporte-paralelo-select">Paralelo:</label>
+                    <select id="reporte-paralelo-select" class="control-select">
+                        <option value="A">Paralelo A</option>
+                        <option value="B">Paralelo B</option>
+                        <option value="C">Paralelo C</option>
+                    </select>
+                    <label for="reporte-fecha-inicio">Desde:</label>
+                    <input type="date" id="reporte-fecha-inicio" class="control-select">
+                    <label for="reporte-fecha-fin">Hasta:</label>
+                    <input type="date" id="reporte-fecha-fin" class="control-select">
+                    
+                    <button class="btn-primary" onclick="generateReport()">Generar Reporte</button>
+                    <button class="btn-success" id="save-report-btn" onclick="saveReport()" style="display:none;">
+                        <i class="fas fa-save"></i> Guardar Reporte
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="reporte-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Cédula</th>
+                                <th>Estudiante</th>
+                                <th>Total Clases</th>
+                                <th>Faltas</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reporte-table-body">
+                            <tr><td colspan="5">Seleccione los filtros y presione "Generar Reporte".</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="reporte-session-detail" style="display:none; margin-top: 30px;">
+                    <h3 class="Subtema" id="session-detail-title">Detalle de Asistencias por Sesión</h3>
+                    <div class="linea" style="background-color:#ccc;"></div>
+                    <div class="table-responsive">
+                        <table id="session-table" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Observación</th>
+                                </tr>
+                            </thead>
+                            <tbody id="session-table-body">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-filters" class="report-mode-content hidden">
+                <h3 class="Subtema">Buscar Reporte Guardado</h3>
+                <div class="report-filters">
+                    <label for="view-search-name">Buscar por Nombre:</label>
+                    <input type="text" id="view-search-name" class="control-select" placeholder="Ej: PARCIAL 1">
+                    <label for="view-search-date-start">Fecha Generación Desde:</label>
+                    <input type="date" id="view-search-date-start" class="control-select">
+                    <label for="view-search-date-end">Fecha Generación Hasta:</label>
+                    <input type="date" id="view-search-date-end" class="control-select">
+                    <button class="btn-secondary" onclick="filterSavedReports()">Buscar Reportes</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="saved-reports-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre del Reporte</th>
+                                <th>Curso / Paralelo</th>
+                                <th>Rango Cubierto</th>
+                                <th>Fecha Generación</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="saved-reports-table-body">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="pendientes" class="tab-content">
+            <h2 class="Tema">Gestión de Solicitudes de Justificación</h2>
+            <div class="linea"></div>
+            <div class="table-responsive">
+                <table id="pendientes-table" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha de Falta</th>
+                            <th>Estudiante</th>
+                            <th>Curso</th>
+                            <th>Motivo (Resumen)</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendientes-table-body">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="success-modal-docente" class="modal">
+        <div class="modal-content small-modal">
+            <span class="close-button" onclick="closeDocenteModal()">&times;</span>
+            <h3 class="Tema">Notificación</h3>
+            <div class="linea" style="margin-bottom: 20px;"></div>
+            <p id="docente-modal-message"></p>
+            <button class="btn-primary" onclick="closeDocenteModal()">Aceptar</button>
+        </div>
+    </div>
+</body>
+</html>
