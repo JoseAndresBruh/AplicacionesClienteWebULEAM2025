@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Único | ULEAM Asistencias</title>
+    <link rel="stylesheet" href="login-styles.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <main>
+        <div class="login-container">
+            <div class="header-login">
+                <div class="logo-placeholder">
+                    <img src="logouleam.png" alt="Logo ULEAM" style="width: 100%; height: 100%;">
+                </div>
+                <h1>Sistema de Asistencia ULEAM</h1>
+                <p class="subtitle">Acceso Único con Credenciales Institucionales</p>
+            </div>
+    
+            <form id="loginForm" class="login-form">
+                <label for="correo">Correo Institucional</label>
+                <input type="email" id="correo" placeholder="usuario@uleam.edu.ec" required>
+    
+                <label for="contrasena">Contraseña</label>
+                <input type="password" id="contrasena" placeholder="************" required>
+                
+                <p class="enlace-olvido"><a href="#">¿Olvidó su contraseña?</a></p>
+    
+                <div id="error-message" class="error-message"></div>
+                
+                <button type="submit" class="btn-primary">Iniciar Sesión</button>
+                <button type="button" class="btn-secondary" onclick="loginOffice365()">
+                    <i class="fab fa-microsoft"></i> Inicie sesión con Office365
+                </button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
