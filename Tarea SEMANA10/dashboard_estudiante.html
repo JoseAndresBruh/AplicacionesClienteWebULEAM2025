@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudiante | Historial de Asistencias</title>
+    <link rel="stylesheet" href="HojaVidaEstilosJALM.css">
+    <link rel="stylesheet" href="dashboard-styles.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <script src="config_data.js"></script>
+    <script src="db_estudiante.js"></script>
+    <script src="estudiante.js" defer></script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-area">
+                <img src="logouleamhorizontal.png" alt="Logo ULEAM" class="header-logo-horizontal">
+                <span class="system-title">Control de Asistencia</span>
+            </div>
+            <div class="user-info">
+                <span id="welcome-message">Bienvenido, <strong id="student-name-display">Estudiante</strong></span>
+                <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
+            </div>
+        </div>
+    </header>
+    
+    <div class="contenedor-seccion main-content">
+        <h2 class="Tema">Mi Historial de Asistencias</h2>
+        <div class="linea"></div>
+
+        <div style="background-color: #e8f4fd; padding: 10px; margin-bottom: 20px; border-left: 4px solid #2196F3; color: #0c5460; font-family: 'Montserrat', sans-serif;">
+            <i class="fas fa-info-circle"></i> 
+            <span id="xml-info-banner">Cargando normativa...</span>
+        </div>
+
+        <p class="summary-note">El historial se muestra resumido por curso. Seleccione una materia para ver el detalle.</p>
+
+        <div class="course-controls">
+            <label for="curso-select">Filtrar por Curso:</label>
+            <select id="curso-select" class="control-select">
+                <option>Cargando cursos...</option>
+            </select>
+            </div>
+
+        <div class="table-responsive">
+            <table id="asistencia-table" class="data-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Tema</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="justificacion-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <h3 class="Tema">Solicitar Justificación</h3>
+            <div class="linea" style="margin-bottom: 20px;"></div>
+
+            <p>Falta a Justificar: <strong id="falta-detalle"></strong></p>
+            <p class="alerta-plazo" style="color: #d9534f; font-weight: bold; font-size: 0.9em;"></p>
+
+            <form id="justificacionForm">
+                <label for="motivo">Motivo Detallado (Obligatorio)</label>
+                <textarea id="motivo" rows="4" required></textarea>
+
+                <label for="documento">Adjuntar Justificativo (PDF/Imagen)</label>
+                <input type="file" id="documento" accept=".pdf, image/*" required>
+
+                <button type="submit" class="btn-primary">Enviar Solicitud</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="success-modal" class="modal">
+        <div class="modal-content small-modal">
+            <span class="close-button" onclick="closeSuccessModal()">&times;</span>
+            <h3 class="Tema">¡Éxito!</h3>
+            <div class="linea" style="margin-bottom: 20px;"></div>
+            <p>Solicitud enviada con éxito. El estado se ha actualizado a "Pendiente de Revisión".</p>
+            <button class="btn-primary" onclick="closeSuccessModal()">Aceptar</button>
+        </div>
+    </div>
+</body>
+</html>
