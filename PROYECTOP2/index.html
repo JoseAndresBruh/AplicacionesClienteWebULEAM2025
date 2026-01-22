@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Asistencia | ULEAM</title>
+    <link rel="stylesheet" href="login-styles.css">
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link rel="stylesheet" href="docente-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="config_data.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        :root { --uleam-red: #C00000; --uleam-dark: #003366; }
+        body { margin: 0; font-family: 'Montserrat', sans-serif; overflow-x: hidden; position: relative; min-height: 100vh; }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-size: cover; background-position: center; opacity: 0.18; transition: background-image 0.5s ease; }
+        .bg-login { background-image: url('fondologin.png'); }
+        .bg-estudiante { background-image: url('fondoestudiantes.png'); }
+        .bg-docente { background-image: url('fondoprofes.png'); }
+        .app-container { width: 94vw; margin: 20px auto; background: rgba(255, 255, 255, 0.98); min-height: 92vh; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; }
+        .main-header { width: 100%; padding: 12px 2%; box-sizing: border-box; }
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; table-layout: auto; }
+        .data-table th { background-color: var(--uleam-dark); color: white; padding: 15px; text-align: left; }
+        .data-table td { padding: 14px; border-bottom: 1px solid #eee; }
+        .attendance-options { white-space: nowrap; display: flex; gap: 12px; }
+        .btn-action-cell { display: flex; flex-direction: column; gap: 6px; width: 130px; }
+        .btn-small-doc { padding: 7px; border-radius: 4px; border: none; cursor: pointer; font-weight: 700; color: white; font-size: 0.8em; }
+        .btn-app { background: #28a745; }
+        .btn-rej { background: var(--uleam-red); }
+        .docente-selector-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 75vh; gap: 25px; }
+        .profile-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.12); width: 280px; text-align: center; cursor: pointer; border: 3px solid transparent; transition: 0.3s; }
+        .profile-card:hover { border-color: var(--uleam-red); transform: translateY(-8px); }
+        .profile-card i { font-size: 3.5em; color: var(--uleam-dark); margin-bottom: 15px; }
+        .profile-card.student-card i { color: var(--uleam-red); }
+        .profile-card h3 { margin: 8px 0; color: var(--uleam-dark); }
+        .note-text { color: #666; font-style: italic; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div :class="['bg-overlay', bgClass]"></div>
+        
+        <div v-if="viewState === 'login'" class="login-wrapper" style="display: flex; justify-content: center; padding-top: 100px;">
+            <div class="login-container" style="width: 400px; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.2);">
+                <div class="header-login">
+                    <img src="logouleam.png" alt="Logo ULEAM" style="max-width: 150px; margin-bottom: 15px;">
+                    <h1>Acceso Único</h1>
+                    <p class="subtitle">Gestión Académica Institucional</p>
+                </div>
+                <form @submit.prevent="handleLogin" class="login-form">
+                    <label>Correo Electrónico</label>
+                    <input type="email" v-model="loginForm.correo" placeholder="usuario@uleam.edu.ec" required>
+                    <label>Contraseña</label>
+                    <input type="password" v-model="loginForm.contrasena" placeholder="********" required>
+                    <div v-if="error" class="error-message">{{ error }}</div>
+                    <button type="submit" class="btn-primary">Entrar</button>
+                    <button type="button" class="btn-secondary" @click="viewState = 'selectProfile'">
+                        <i class="fab fa-microsoft"></i> Iniciar sesión con Outlook
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div v-if="viewState === 'selectProfile'" class="app-container">
+            <header class="main-header">
+                <div class="header-content"><div class="logo-area"><img src="logouleamhorizontal.png" class="header-logo-horizontal" style="height: 55px;"></div></div>
+            </header>
+            <div class="docente-selector-container">
+                <h2 class="Tema" style="font-size: 2.2em;">Seleccione su Perfil Institucional</h2>
+                <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center;">
+                    <div class="profile-card" @click="loginAsProfile('docente', '1350153670')">
+                        <i class="fas fa-user-tie"></i>
+                        <h3>José Loor</h3>
+                        <p>Docente Académico</p>
+                        <p><small>docente@uleam.edu.ec</small></p>
+                    </div>
+                    <div class="profile-card" @click="loginAsProfile('docente', '1367911777')">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <h3>Andrés Pérez</h3>
+                        <p>Docente Académico</p>
+                        <p><small>docente2@uleam.edu.ec</small></p>
+                    </div>
+                    <div class="profile-card student-card" @click="loginAsProfile('estudiante', '1350153670')">
+                        <i class="fas fa-user-graduate"></i>
+                        <h3>José Loor</h3>
+                        <p>Estudiante Pregrado</p>
+                        <p><small>estudiante@uleam.edu.ec</small></p>
+                    </div>
+                </div>
+                <button class="btn-secondary" @click="viewState = 'login'" style="width: 250px; margin-top: 30px;">Cancelar Autenticación</button>
+            </div>
+        </div>
+
+        <div v-if="viewState === 'dashboard'" class="app-container">
+            <header class="main-header">
+                <div class="header-content">
+                    <div class="logo-area">
+                        <img src="logouleamhorizontal.png" alt="Logo ULEAM" class="header-logo-horizontal">
+                        <span class="system-title">Gestión de Asistencia</span>
+                    </div>
+                    <div class="user-info">
+                        <span>Bienvenido: <strong>{{ currentUser.nombreCompleto }}</strong></span>
+                        <button class="btn-logout" @click="logout">Cerrar Sesión</button>
+                    </div>
+                </div>
+            </header>
+
+            <main v-if="currentUser.rol === 'docente'" class="main-docente-content">
+                <nav class="docente-tabs">
+                    <button :class="['tab-button', { active: currentTab === 'registro' }]" @click="currentTab = 'registro'">
+                        <i class="fas fa-edit"></i> Registro Diario
+                    </button>
+                    <button :class="['tab-button', { active: currentTab === 'reportes' }]" @click="currentTab = 'reportes'">
+                        <i class="fas fa-chart-line"></i> Reportes Generales
+                    </button>
+                    <button :class="['tab-button', { active: currentTab === 'pendientes' }]" @click="currentTab = 'pendientes'">
+                        <i class="fas fa-envelope-open-text"></i> Justificaciones
+                        <span class="badge-count" v-if="pendingCount > 0">{{ pendingCount }}</span>
+                    </button>
+                </nav>
+                
+                <div v-if="currentTab === 'registro'" class="tab-content active">
+                    <h2 class="Tema">Control de Asistencia: {{ currentCourseName }}</h2>
+                    <div class="course-controls">
+                        <select v-model="docenteSelection.curso" class="control-select">
+                            <option v-for="c in docenteData.cursos" :key="c.id" :value="c.id">{{ c.nombre }}</option>
+                        </select>
+                        <select v-model="docenteSelection.paralelo" class="control-select">
+                            <option value="A">Paralelo A</option>
+                            <option value="B">Paralelo B</option>
+                        </select>
+                        <input type="date" v-model="docenteSelection.fecha" class="control-select">
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Cédula</th>
+                                <th>Estudiante</th>
+                                <th>Estado de Asistencia</th>
+                                <th>Notas de Clase</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="est in filteredStudents" :key="est.cedula">
+                                <td>{{ est.cedula }}</td>
+                                <td>{{ est.nombre }}</td>
+                                <td>
+                                    <div class="attendance-options">
+                                        <label><input type="radio" :name="est.cedula" value="Asistió" v-model="attendanceBatch[est.cedula]"> Asistió</label>
+                                        <label><input type="radio" :name="est.cedula" value="No Asistió" v-model="attendanceBatch[est.cedula]"> No Asistió</label>
+                                    </div>
+                                </td>
+                                <td><input type="text" v-model="attendanceNotes[est.cedula]" class="control-select" style="width: 100%;" placeholder="Nota aclaratoria..."></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="control-buttons">
+                        <button class="btn-primary" @click="saveAttendanceBatch">Sincronizar Registros</button>
+                    </div>
+                </div>
+
+                <div v-if="currentTab === 'reportes'" class="tab-content active">
+                    <h2 class="Tema">Reporte Consolidado por Materia</h2>
+                    <div class="report-filters">
+                        <select v-model="reportFilter.curso" class="control-select">
+                            <option v-for="c in docenteData.cursos" :key="c.id" :value="c.id">{{ c.nombre }}</option>
+                        </select>
+                        <button class="btn-primary" @click="generateReport">Actualizar Lista</button>
+                    </div>
+                    <table class="data-table" v-if="generatedReport.length > 0">
+                        <thead>
+                            <tr>
+                                <th>Nombre Completo</th>
+                                <th>Clases Impartidas</th>
+                                <th>Faltas Totales</th>
+                                <th>Porcentaje Final</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="r in generatedReport" :key="r.cedula">
+                                <td>{{ r.nombre }}</td>
+                                <td>{{ r.total }}</td>
+                                <td>{{ r.faltas }}</td>
+                                <td><strong>{{ r.porcentaje }}%</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div v-if="currentTab === 'pendientes'" class="tab-content active">
+                    <h2 class="Tema">Bandeja de Solicitudes (Filtro por Docente)</h2>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha Falta</th>
+                                <th>Estudiante</th>
+                                <th>Materia Origen</th>
+                                <th>Explicación</th>
+                                <th>Evidencia</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="j in pendingJustifications" :key="j.id">
+                                <td>{{ j.fecha }}</td>
+                                <td><strong>{{ j.estudianteNombre }}</strong><br><small>{{ j.estudianteCedula }}</small></td>
+                                <td>{{ j.cursoId }}</td>
+                                <td style="max-width: 300px;">{{ j.motivo }}</td>
+                                <td>
+                                    <button class="btn-small-doc" style="background: var(--uleam-dark); width: 100%;" @click="viewAttachment(j)">
+                                        <i class="fas fa-eye"></i> Ver Adjunto
+                                    </button>
+                                </td>
+                                <td>
+                                    <div class="btn-action-cell">
+                                        <button class="btn-small-doc btn-app" @click="resolveJustification(j, 'Aprobada')">Aprobar</button>
+                                        <button class="btn-small-doc btn-rej" @click="resolveJustification(j, 'Rechazada')">Rechazar</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+
+            <main v-if="currentUser.rol === 'estudiante'" class="main-content">
+                <h2 class="Tema">Historial Académico de José Loor</h2>
+                <div class="course-controls">
+                    <label>Filtrar Asignatura:</label>
+                    <select v-model="studentSelection.curso" class="control-select">
+                        <option v-for="c in studentData.cursos" :key="c.id" :value="c.id">{{ c.nombre }}</option>
+                    </select>
+                    <div class="stats-box" :style="{background: studentStats < 75 ? 'var(--uleam-red)' : '#28a745', marginLeft: '25px', display: 'inline-block', padding: '12px 30px', color: 'white', borderRadius: '10px', fontWeight: 'bold'}">
+                        Rendimiento: {{ studentStats }}%
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Contenido de Clase</th>
+                            <th>Estado Actual</th>
+                            <th>Observaciones del Docente</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="asist in filteredStudentAttendance" :key="asist.id">
+                            <td>{{ asist.fecha }}</td>
+                            <td>{{ asist.tema }}</td>
+                            <td :class="getStatusClass(asist.estado)">{{ asist.estado }}</td>
+                            <td class="note-text">{{ asist.observacion || 'Sin comentarios registrados' }}</td>
+                            <td>
+                                <div v-if="asist.estado === 'No Asistió'">
+                                    <button v-if="checkPlazo(asist)" class="btn-secondary" @click="openModal(asist)">Enviar Justificación</button>
+                                    <span v-else style="color: var(--uleam-red); font-weight: bold; font-size: 0.85em;">PLAZO VENCIDO</span>
+                                </div>
+                                <span v-else-if="asist.estado === 'Pendiente de Revisión'">EN TRÁMITE</span>
+                                <span v-else>-</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </main>
+        </div>
+
+        <div v-if="attachmentModal" class="modal" style="display: block; background: rgba(0,0,0,0.85);">
+            <div class="modal-content" style="max-width: 800px; text-align: center; padding: 20px;">
+                <span class="close-button" @click="attachmentModal = false">&times;</span>
+                <h3 class="Tema">Documento de Justificación</h3>
+                <div class="linea"></div>
+                <img :src="attachmentUrl" style="max-width: 100%; max-height: 60vh; margin-top: 20px; border-radius: 8px; border: 1px solid #ddd;" alt="Fallo al cargar evidencia">
+                <div style="margin-top: 20px;">
+                    <button class="btn-primary" @click="attachmentModal = false">Cerrar Vista</button>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="showModal" class="modal" style="display: block; background: rgba(0,0,0,0.7);">
+            <div class="modal-content" style="max-width: 650px; margin-top: 60px; padding: 35px;">
+                <span class="close-button" @click="showModal = false">&times;</span>
+                <h3 class="Tema">Formulario de Justificación</h3>
+                <p>Asignatura: <strong>{{ currentStudentCourseName }}</strong></p>
+                <p>Fecha: <strong>{{ selectedFalta.fecha }}</strong></p>
+                <form @submit.prevent="submitJustification">
+                    <label>Motivo detallado:</label>
+                    <textarea v-model="justificationForm.motivo" rows="5" style="width:100%; padding: 15px; border-radius: 10px;" required placeholder="Explique brevemente su inasistencia..."></textarea>
+                    <label style="margin-top: 20px; display: block;">Evidencia (Imagen):</label>
+                    <input type="file" @change="handleFileUpload" required>
+                    <button type="submit" class="btn-primary" style="width:100%; margin-top: 30px; padding: 18px;">Enviar al Docente</button>
+                </form>
+            </div>
+        </div>
+
+        <div v-if="showSuccess" class="modal" style="display: block; background: rgba(0,0,0,0.7);">
+            <div class="modal-content small-modal" style="text-align: center; margin-top: 150px; padding: 45px;">
+                <i class="fas fa-check-circle" style="color: #28a745; font-size: 4em; margin-bottom: 25px;"></i>
+                <h3 class="Tema">Solicitud Procesada</h3>
+                <p>{{ successMessage }}</p>
+                <button class="btn-primary" @click="showSuccess = false" style="margin-top: 25px;">Aceptar</button>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

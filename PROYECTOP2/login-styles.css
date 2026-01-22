@@ -1,0 +1,119 @@
+:root {
+    --uleam-red: #C00000; 
+    --uleam-dark: #003366; 
+    --uleam-light-gray: #f4f4f4;
+    --uleam-medium-gray: #ccc;
+    --uleam-white: white;
+}
+
+
+body {
+    background-color: var(--uleam-light-gray);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background-color: var(--uleam-white);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    text-align: center;
+}
+
+.header-login h1 {
+    font-family: 'Bebas Neue', sans-serif; 
+    font-size: 2.2em;
+    color: var(--uleam-red); 
+    margin-bottom: 5px;
+}
+
+.header-login .subtitle {
+    font-family: 'Montserrat', sans-serif;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.logo-placeholder {
+    margin: 0 auto 15px;
+    text-align: center; 
+}
+
+.logo-placeholder img {
+    max-width: 150px; 
+    height: auto; 
+    display: block; 
+    margin: 0 auto; 
+}
+
+.login-form label {
+    display: block;
+    text-align: left;
+    font-weight: 700;
+    color: var(--uleam-dark);
+    margin-top: 15px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid var(--uleam-medium-gray);
+    border-radius: 8px;
+    box-sizing: border-box; 
+}
+
+.btn-primary {
+    background-color: var(--uleam-red); 
+    color: var(--uleam-white);
+    border: none;
+    padding: 12px 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 700;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #8C0000; 
+}
+
+
+.btn-secondary {
+    background-color: var(--uleam-dark); 
+    color: var(--uleam-white);
+    border: 1px solid var(--uleam-dark);
+    padding: 12px 20px;
+    margin-top: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 700;
+    transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #001f3f;
+}
+
+.enlace-olvido a {
+    color: var(--uleam-dark);
+    text-decoration: none;
+    font-size: 0.9em;
+    display: block;
+    text-align: right;
+    margin-top: -5px;
+}
+
+.error-message {
+    color: var(--uleam-red);
+    margin-top: 15px;
+    font-weight: 700;
+}
